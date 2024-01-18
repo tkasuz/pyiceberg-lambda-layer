@@ -37,6 +37,7 @@ jobs:
           aws-region: ${{ matrix.aws-region }}
       - name: Publish Lambda Layer
         run: |
+          cd layer
           aws lambda publish-layer-version \
             --layer-name pyiceberg \
             --zip-file fileb://layer.zip \
