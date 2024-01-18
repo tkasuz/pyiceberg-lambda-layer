@@ -1,0 +1,19 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  AWS Lambda Layer for pyiceberg
+Parameters:
+  PythonVersion:
+    Type: String
+    Default: python3.12
+Resources:
+  SharedLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: pyiceberg
+      ContentUri: layer/
+      CompatibleRuntimes:
+        - !Ref PythonVersion
+Outputs:
+  LayerArn:
+    Value: !Ref SharedLayer

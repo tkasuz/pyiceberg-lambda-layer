@@ -1,4 +1,4 @@
-name: CI
+name: Build Lambda Layer
 on:
   push:
     branches:
@@ -26,21 +26,10 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt -t layer/python/lib/python${{ matrix.python-version }}/site-packages/
-      - name: Zip Layer
-        run: |
-          cd layer
-          zip -r layer.zip . -x '*.pyc'
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+      - uses: aws-actions/setup-sam@v2
+      - uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_IAM_ROLE_ARN }}
           aws-region: ${{ matrix.aws-region }}
-      - name: Publish Lambda Layer
-        run: |
-          cd layer
-          aws lambda publish-layer-version \
-            --layer-name pyiceberg \
-            --zip-file fileb://layer.zip \
-            --compatible-runtimes python${{ matrix.python-version }}
-            --compatible-architectures "x86_64" \
-            --region ${{ matrix.aws-region }}
+      - run: sam build --use-container --parameter-overrides PythonVersion=python${{ matrix.python-version }}
+      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
