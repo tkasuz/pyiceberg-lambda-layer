@@ -10,7 +10,6 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.12"]
-        poetry-version: ["1.7.1"]
         aws-region: ["ap-northeast-1"]
     runs-on: ubuntu-latest
     steps:
@@ -18,18 +17,14 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Run image
-        uses: abatilo/actions-poetry@v2
-        with:
-          poetry-version: ${{ matrix.poetry-version }}
       - name: install dependencies
         run: |
-          poetry export -f requirements.txt --without-hashes -o requirements.txt
-          poetry run pip install . -r requirements.txt -t layer
+          pip install --upgrade pip
+          pip install -r requirements.txt -t layer/python/lib/python${{ matrix.python-version }}/site-packages/
       - name: Zip Layer
         run: |
           cd layer
-          zip -r ../layer.zip . -x '*.pyc'
+          zip -r layer.zip . -x '*.pyc'
       - name: Configure AWS credentials from Test account
         uses: aws-actions/configure-aws-credentials@v4
         with:

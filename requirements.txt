@@ -1,0 +1,1 @@
+pyiceberg[glue,s3fs]==0.5.1 
