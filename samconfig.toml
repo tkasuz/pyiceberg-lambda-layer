@@ -1,9 +1,10 @@
 version = 0.1
 
 [default.build.parameters]
-debug = true
+debug = false
 use_container = true
 
 [default.deploy.parameters]
 stack_name="pyiceberg-lambda-layer"
+debug = false
 confirm_changeset = false

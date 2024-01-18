@@ -31,5 +31,6 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_IAM_ROLE_ARN }}
           aws-region: ${{ matrix.aws-region }}
+          mask-aws-account-id: true
       - run: sam build --parameter-overrides PythonVersion=python${{ matrix.python-version }}
-      - run: sam deploy --no-fail-on-empty-changeset
+      - run: sam deploy --no-fail-on-empty-changeset --s3-bucket ${{ secrets.SAM_S3_BUCKET_NAME }}
