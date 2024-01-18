@@ -31,5 +31,5 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_IAM_ROLE_ARN }}
           aws-region: ${{ matrix.aws-region }}
-      - run: sam build --use-container --parameter-overrides PythonVersion=python${{ matrix.python-version }}
-      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
+      - run: sam build --parameter-overrides PythonVersion=python${{ matrix.python-version }}
+      - run: sam deploy --no-fail-on-empty-changeset
