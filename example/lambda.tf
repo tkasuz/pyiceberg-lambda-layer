@@ -5,7 +5,7 @@ module "lambda_function" {
   function_name            = "pyiceberg-test"
   handler                  = "index.lambda_handler"
   runtime                  = "python3.12"
-  architectures            = ["arm64"]
+  architectures            = ["x86_64"]
   recreate_missing_package = false
   publish                  = true
   source_path              = "${path.module}/lambdas/index.py"

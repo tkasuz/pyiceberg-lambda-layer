@@ -12,6 +12,7 @@ Resources:
     Properties:
       LayerName: pyiceberg
       ContentUri: layer/
+      CompatibleArchitectures: [x86_64]
       CompatibleRuntimes:
         - !Ref PythonVersion
 Outputs:
