@@ -14,23 +14,31 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.12"]
-        aws-region: ["ap-northeast-1"]
+        platform: ["linux/arm64"]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
-        run: |
-          pip install --upgrade pip
-          pip install -r requirements.txt -t layer/python/lib/python${{ matrix.python-version }}/site-packages/
-      - uses: aws-actions/setup-sam@v2
-      - uses: aws-actions/configure-aws-credentials@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@68827325e0b33c7199eb31dd4e31fbe9023e06e3 # v2.0.0
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@f95db51fddba0c2d1ec667646a06c2ce06100226 # v3.0.0
+      - name: Set up AWS Credential
+        id: aws
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_IAM_ROLE_ARN }}
-          aws-region: ${{ matrix.aws-region }}
+          aws-region: ap-northeast-1
           mask-aws-account-id: true
-      - run: sam build --parameter-overrides PythonVersion=python${{ matrix.python-version }}
-      - run: sam deploy --no-fail-on-empty-changeset --s3-bucket ${{ secrets.SAM_S3_BUCKET_NAME }}
+      - name: Build Lambda Layer
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          platforms: ${{ matrix.platform }}
+          build-args: |
+            "AWS_ACCESS_KEY_ID=${{ steps.creds.outputs.aws-access-key-id }}"
+            "AWS_SECRET_ACCESS_KEY=${{ steps.creds.outputs.aws-secret-access-key }}"
+            "AWS_SESSION_TOKEN=${{ steps.creds.outputs.aws-session-token }}"
+            "AWS_DEFAULT_REGION=ap-northeast-1
+            "SAM_S3_BUCKET_NAME=${{ secrets.SAM_S3_BUCKET_NAME }}"
