@@ -17,9 +17,7 @@ def lambda_handler(event, context):
         logger.info(catalog.list_tables(DATABASE))
         table = catalog.load_table(f"{DATABASE}.{TABLE}")
         logger.info(table.metadata)
-        scan = table.scan()
-        df = scan.to_pandas()
-        logger.info(df.head())
+        logger.info(table.scan())
     except Exception as e:
         logger.exception(e)
         raise e

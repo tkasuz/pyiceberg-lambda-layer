@@ -7,13 +7,15 @@ module "lambda_function" {
   runtime                  = "python3.12"
   architectures            = ["x86_64"]
   recreate_missing_package = false
+  ignore_source_code_hash  = true
+  timeout                  = 30
   publish                  = true
   source_path              = "${path.module}/lambdas/index.py"
   create_role              = false
   lambda_role              = aws_iam_role.this.arn
 
   layers = [
-    "arn:aws:lambda:ap-northeast-1:017000801446:layer:AWSLambdaPowertoolsPythonV2-Arm64:59",
+    "arn:aws:lambda:${data.aws_region.current.name}:017000801446:layer:AWSLambdaPowertoolsPythonV2:60",
     data.aws_lambda_layer_version.pyiceberg.arn
   ]
 
