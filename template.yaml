@@ -2,6 +2,18 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
   AWS Lambda Layer for pyiceberg
+Metadata:
+  AWS::ServerlessRepo::Application:
+    Name: pyiceberg
+    Description: "AWS Lambda Layer for pyiceberg"
+    Author: tkasuz
+    SpdxLicenseId: Apache-2.0
+    LicenseUrl: LICENSE
+    ReadmeUrl: README.md
+    Labels: ['layer','lambda','iceberg','python', 'aws']
+    HomePageUrl: https://github.com/tkasuz/pyiceberg-lambda-layer 
+    SemanticVersion: 0.5.1
+    SourceCodeUrl: https://github.com/tkasuz/pyiceberg-lambda-layer  
 Parameters:
   PythonVersion:
     Type: String
