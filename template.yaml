@@ -14,10 +14,6 @@ Metadata:
     HomePageUrl: https://github.com/tkasuz/pyiceberg-lambda-layer 
     SemanticVersion: 0.5.1
     SourceCodeUrl: https://github.com/tkasuz/pyiceberg-lambda-layer  
-Parameters:
-  PythonVersion:
-    Type: String
-    Default: python3.12
 Resources:
   SharedLayer:
     Type: AWS::Serverless::LayerVersion
@@ -25,8 +21,7 @@ Resources:
       LayerName: pyiceberg
       ContentUri: layer/
       CompatibleArchitectures: [x86_64]
-      CompatibleRuntimes:
-        - !Ref PythonVersion
+      CompatibleRuntimes: [python3.12]
 Outputs:
   LayerArn:
     Value: !Ref SharedLayer

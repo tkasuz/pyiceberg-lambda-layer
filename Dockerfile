@@ -15,5 +15,10 @@ COPY . .
 RUN pip install --upgrade pip \
     && pip install -r requirements.txt -t layer/python/lib/python3.12/site-packages/
 
-RUN sam build --parameter-overrides PythonVersion=python3.12 \
-    && sam deploy --no-fail-on-empty-changeset --s3-bucket ${SAM_S3_BUCKET_NAME}
+RUN sam package \
+    --template-file template.yaml \
+    --output-template-file packaged.yaml \
+    --s3-bucket ${SAM_S3_BUCKET_NAME} \
+    && sam publish \
+    --template packaged.yaml \
+    --region ${AWS_DEFAULT_REGION}
