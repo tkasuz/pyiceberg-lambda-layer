@@ -11,7 +11,7 @@ ENV AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
 ENV AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
 ENV AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
 
-COPY requirements.txt template.yaml samconfig.toml ./
+COPY . .
 RUN pip install --upgrade pip \
     && pip install -r requirements.txt -t layer/python/lib/python3.12/site-packages/
 
